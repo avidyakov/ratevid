@@ -1,0 +1,25 @@
+volumes:
+  postgres_data:
+
+services:
+  postgres:
+    restart: unless-stopped
+    image: postgres:16-alpine3.19
+    env_file:
+      - .dev-only-env
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  web:
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    env_file:
+      - .dev-only-env
+    build:
+      context: .
+    ports:
+      - 8000:8000

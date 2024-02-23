@@ -1,0 +1,44 @@
+default_stages: [ commit ]
+
+repos:
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.2.1
+    hooks:
+      - id: autoflake
+        args: [ --in-place, --remove-all-unused-imports, --remove-unused-variables, --remove-duplicate-keys ]
+  - repo: https://github.com/MarcoGorelli/absolufy-imports
+    rev: v0.3.1
+    hooks:
+      - id: absolufy-imports
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: [ --profile, black, --filter-files, --line-length=79 ]
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+        language: python
+        args: [ --line-length=79 ]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+        stages: [ commit ]
+      - id: check-json
+        stages: [ commit ]
+      - id: pretty-format-json
+        stages: [ commit ]
+      - id: debug-statements
+        stages: [ commit ]
+      - id: end-of-file-fixer
+        stages: [ commit ]
+      - id: check-merge-conflict
+        stages: [ commit ]
+      - id: trailing-whitespace
+        stages: [ commit ]
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8

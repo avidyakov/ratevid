@@ -1,0 +1,8 @@
+# postgres settings
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=ratevid
+
+# fastapi settings
+PROJECT_NAME=ratevid
+DATABASE_DSN=postgresql+asyncpg://postgres:postgres@postgres:5432/ratevid
