@@ -14,6 +14,8 @@ class AppSettings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     base_dir: Path = Path(__file__).parent.parent
+    base_currency: str = "USD"
+    exchange_rate_api_key: str
 
     class Config:
         env_file = ".dev-only-env"
