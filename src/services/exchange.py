@@ -1,7 +1,10 @@
+import decimal
+
+
 def exchange(
     *,
-    from_,
-    to,
-    amount: float,
-):
-    return round(amount / from_.rate * to.rate, 2)
+    from_: decimal.Decimal,
+    to: decimal.Decimal,
+    amount: decimal.Decimal,
+) -> decimal.Decimal:
+    return round(amount / from_ * to, 2)

@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import ORJSONResponse
 
 from schemas.currency import ExchangeInput, ExchangeOutput
@@ -34,9 +34,22 @@ async def exchange_currency(
     exchange_input: ExchangeInput,
     repo: RepositoryDB = Depends(RepositoryDB),
 ):
+    from_currency = await repo.get_by_codename(exchange_input.from_currency)
+    if not from_currency:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_GATEWAY,
+            detail="from_currency not found",
+        )
+
+    to_currency = await repo.get_by_codename(exchange_input.to_currency)
+    if not to_currency:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_GATEWAY, detail="to_currency not found"
+        )
+
     result = exchange(
-        from_=await repo.get_by_codename(exchange_input.from_currency),
-        to=await repo.get_by_codename(exchange_input.to_currency),
+        from_=from_currency.rate,
+        to=to_currency.rate,
         amount=exchange_input.amount,
     )
     return ExchangeOutput(

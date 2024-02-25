@@ -14,7 +14,7 @@ class RepositoryDB(Repository):
     def __init__(self, db: AsyncSession = Depends(get_session)):
         self.db = db
 
-    async def get_by_codename(self, codename):
+    async def get_by_codename(self, codename: str) -> Currency | None:
         return await self.db.get(Currency, codename)
 
     async def update_multi(self, data: dict) -> None:
@@ -39,7 +39,7 @@ class RepositoryDB(Repository):
         await self.db.execute(insert_table_sql)
         await self.db.commit()
 
-    async def get_last_update(self) -> datetime.datetime:
+    async def get_last_update(self) -> datetime.datetime | None:
         query = select(Currency.updated_at).order_by(
             Currency.updated_at.desc()
         )

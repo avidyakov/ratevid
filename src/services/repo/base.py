@@ -1,9 +1,14 @@
+import datetime
+
+from models import Currency
+
+
 class Repository:
-    def get(self, *args, **kwargs):
+    async def get_by_codename(self, codename: str) -> Currency | None:
         raise NotImplementedError
 
-    def update_multi(self, *args, **kwargs):
+    async def update_multi(self, codes_rates: dict) -> None:
         raise NotImplementedError
 
-    def get_last_update(self, *args, **kwargs):
+    async def get_last_update(self) -> datetime.datetime | None:
         raise NotImplementedError

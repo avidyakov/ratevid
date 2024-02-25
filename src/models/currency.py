@@ -16,7 +16,7 @@ class Currency(Base):
 
     __mapper_args__ = {"eager_defaults": True}
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f"{self.__class__.__name__}"
             f"(name='{self.name}', codename='{self.codename}')"

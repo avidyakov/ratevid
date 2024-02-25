@@ -10,7 +10,7 @@ class ExchangeRateAPIProvider(BaseExchangeProvider):
     https://www.exchangerate-api.com/docs/overview
     """
 
-    def _extract_rates(self, response_data):
+    def _extract_rates(self, response_data: dict) -> dict:
         try:
             return response_data["conversion_rates"]
         except KeyError:
@@ -18,7 +18,7 @@ class ExchangeRateAPIProvider(BaseExchangeProvider):
                 f"Error while extracting rates from response: {response_data}"
             )
 
-    def _get_url(self):
+    def _get_url(self) -> str:
         return app_settings.exchange_rate_api_url.format(
             api_key=app_settings.exchange_rate_api_key,
             base_currency=app_settings.base_currency,

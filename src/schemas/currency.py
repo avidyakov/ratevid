@@ -10,4 +10,4 @@ class ExchangeInput(BaseModel):
 
 
 class ExchangeOutput(ExchangeInput):
-    result: float
+    result: decimal.Decimal

@@ -10,9 +10,9 @@ logging_config.dictConfig(LOGGING)
 
 class AppSettings(BaseSettings):
     app_title: str = "ratevid"
-    database_dsn: str
     host: str = "0.0.0.0"
     port: int = 8000
+    database_dsn: str
     base_dir: Path = Path(__file__).parent.parent
     base_currency: str = "USD"
     exchange_rate_api_url: str
