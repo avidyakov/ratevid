@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -9,6 +10,7 @@ from services.rate_providers.exchange_rate_api import ExchangeRateAPIProvider
 from services.repo.db import RepositoryDB
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.post("/updates")
@@ -18,6 +20,7 @@ async def update_exchange_rates(
 ):
     rates = await provider.get_rates()
     await repo.update_multi(rates)
+    logger.info("Rates updated")
     return ORJSONResponse(status_code=HTTPStatus.ACCEPTED, content={})
 
 

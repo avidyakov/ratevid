@@ -1,6 +1,9 @@
+import logging
 from http import HTTPStatus
 
 import aiohttp
+
+logger = logging.getLogger(__name__)
 
 
 class ExchangeProviderError(Exception):
@@ -22,7 +25,11 @@ class BaseExchangeProvider:
                     )
 
                 try:
-                    return await response.json()
+                    data = await response.json()
+                    logger.info(
+                        f"Successfully fetched data from {self._get_url()}"
+                    )
+                    return data
                 except aiohttp.ContentTypeError:
                     raise ExchangeProviderError(
                         f"Error while getting data "
