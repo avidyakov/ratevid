@@ -1,11 +1,12 @@
+import asyncio
 import logging
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import ORJSONResponse
 
-from schemas.currency import ExchangeInput, ExchangeOutput
-from services.exchange import exchange
+from schemas.currency import ExchangeInput, ExchangeOutput, LastUpdateOutput
+from services.exchange import exchange, update_rates
 from services.rate_providers.exchange_rate_api import ExchangeRateAPIProvider
 from services.repo.db import RepositoryDB
 
@@ -18,15 +19,14 @@ async def update_exchange_rates(
     provider: ExchangeRateAPIProvider = Depends(ExchangeRateAPIProvider),
     repo: RepositoryDB = Depends(RepositoryDB),
 ):
-    rates = await provider.get_rates()
-    await repo.update_multi(rates)
-    logger.info("Rates updated")
+    asyncio.create_task(update_rates(provider, repo))
+    logger.info("Rates update initiated")
     return ORJSONResponse(status_code=HTTPStatus.ACCEPTED, content={})
 
 
-@router.get("/updates/last")
+@router.get("/updates/last", response_model=LastUpdateOutput)
 async def get_last_update(repo: RepositoryDB = Depends(RepositoryDB)):
-    return {"last_update": await repo.get_last_update()}
+    return LastUpdateOutput(last_update=await repo.get_last_update())
 
 
 @router.post(
@@ -55,9 +55,4 @@ async def execute_currency_exchange(
         to=to_currency.rate,
         amount=exchange_input.amount,
     )
-    return ExchangeOutput(
-        from_currency=exchange_input.from_currency,
-        to_currency=exchange_input.to_currency,
-        amount=exchange_input.amount,
-        result=result,
-    )
+    return ExchangeOutput(result=result)

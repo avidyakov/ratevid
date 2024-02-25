@@ -1,3 +1,4 @@
+import datetime
 import decimal
 
 from pydantic import BaseModel
@@ -9,5 +10,9 @@ class ExchangeInput(BaseModel):
     amount: decimal.Decimal
 
 
-class ExchangeOutput(ExchangeInput):
+class ExchangeOutput(BaseModel):
     result: decimal.Decimal
+
+
+class LastUpdateOutput(BaseModel):
+    last_update: datetime.datetime | None
