@@ -1,19 +1,25 @@
-import aiohttp
+from core.config import app_settings
+from services.rate_providers.base import (
+    BaseExchangeProvider,
+    ExchangeProviderError,
+)
 
-from services.rate_providers.base import ExchangeRateProvider
 
-
-class ExchangeRateAPIProvider(ExchangeRateProvider):
+class ExchangeRateAPIProvider(BaseExchangeProvider):
     """ExchangeRate-API provider.
     https://www.exchangerate-api.com/docs/overview
     """
 
-    async def get_rates(self):
-        # make request with aiohttp
-        async with aiohttp.ClientSession() as session:  # TODO: extract method
-            async with session.get(
-                "https://v6.exchangerate-api.com/"
-                "v6/a9b5b6a88bfae857dabe764d/latest/USD"
-            ) as response:  # TODO: use env var and base currency
-                data = await response.json()  # TODO: handle errors
-                return data["conversion_rates"]
+    def _extract_rates(self, response_data):
+        try:
+            return response_data["conversion_rates"]
+        except KeyError:
+            raise ExchangeProviderError(
+                f"Error while extracting rates from response: {response_data}"
+            )
+
+    def _get_url(self):
+        return app_settings.exchange_rate_api_url.format(
+            api_key=app_settings.exchange_rate_api_key,
+            base_currency=app_settings.base_currency,
+        )

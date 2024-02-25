@@ -6,4 +6,5 @@ POSTGRES_DB=ratevid
 # fastapi settings
 PROJECT_NAME=ratevid
 DATABASE_DSN=postgresql+asyncpg://postgres:postgres@postgres:5432/ratevid
+EXCHANGE_RATE_API_URL=https://v6.exchangerate-api.com/v6/{api_key}/latest/{base_currency}
 EXCHANGE_RATE_API_KEY=a9b5b6a88bfae857dabe764d

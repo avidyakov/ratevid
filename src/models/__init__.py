@@ -3,5 +3,5 @@ __all__ = (
     "Currency",
 )
 
-from models.base import Base
-from models.currency import Currency
+from .base import Base
+from .currency import Currency

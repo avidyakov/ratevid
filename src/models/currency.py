@@ -1,6 +1,6 @@
 from sqlalchemy import Column, DateTime, Numeric, String, Text, func
 
-from models.base import Base
+from . import Base
 
 
 class Currency(Base):
