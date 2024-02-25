@@ -25,7 +25,7 @@ async def update_exchange_rates(
 
 
 @router.get("/updates/last")
-async def last_update(repo: RepositoryDB = Depends(RepositoryDB)):
+async def get_last_update(repo: RepositoryDB = Depends(RepositoryDB)):
     return {"last_update": await repo.get_last_update()}
 
 
@@ -33,7 +33,7 @@ async def last_update(repo: RepositoryDB = Depends(RepositoryDB)):
     "/exchanges",
     response_model=ExchangeOutput,
 )
-async def exchange_currency(
+async def execute_currency_exchange(
     exchange_input: ExchangeInput,
     repo: RepositoryDB = Depends(RepositoryDB),
 ):
