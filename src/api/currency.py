@@ -37,22 +37,25 @@ async def execute_currency_exchange(
     exchange_input: ExchangeInput,
     repo: RepositoryDB = Depends(RepositoryDB),
 ):
-    from_currency = await repo.get_by_codename(exchange_input.from_currency)
+    from_currency = await repo.get_rate_by_codename(
+        exchange_input.from_currency
+    )
     if not from_currency:
         raise HTTPException(
-            status_code=HTTPStatus.BAD_GATEWAY,
+            status_code=HTTPStatus.NOT_FOUND,
             detail="from_currency not found",
         )
 
-    to_currency = await repo.get_by_codename(exchange_input.to_currency)
+    to_currency = await repo.get_rate_by_codename(exchange_input.to_currency)
     if not to_currency:
         raise HTTPException(
-            status_code=HTTPStatus.BAD_GATEWAY, detail="to_currency not found"
+            status_code=HTTPStatus.NOT_FOUND,
+            detail="to_currency not found",
         )
 
     result = exchange(
-        from_=from_currency.rate,
-        to=to_currency.rate,
+        from_=from_currency,
+        to=to_currency,
         amount=exchange_input.amount,
     )
     return ExchangeOutput(result=result)

@@ -1,4 +1,5 @@
 import datetime
+import decimal
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -14,8 +15,10 @@ class RepositoryDB(Repository):
     def __init__(self, db: AsyncSession = Depends(get_session)):
         self.db = db
 
-    async def get_by_codename(self, codename: str) -> Currency | None:
-        return await self.db.get(Currency, codename)
+    async def get_rate_by_codename(
+        self, codename: str
+    ) -> decimal.Decimal | None:
+        return getattr(await self.db.get(Currency, codename), "rate", None)
 
     async def update_multi(self, data: dict) -> None:
         now = datetime.datetime.utcnow()

@@ -39,9 +39,4 @@ def test_exchange_currency(client, session):
         json={"from_currency": "USD", "to_currency": "EUR", "amount": 100},
     )
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {
-        "from_currency": "USD",
-        "to_currency": "EUR",
-        "amount": 100,
-        "result": 85,
-    }
+    assert response.json() == {"result": "85.00"}

@@ -1,10 +1,11 @@
 import datetime
-
-from models import Currency
+import decimal
 
 
 class Repository:
-    async def get_by_codename(self, codename: str) -> Currency | None:
+    async def get_rate_by_codename(
+        self, codename: str
+    ) -> decimal.Decimal | None:
         raise NotImplementedError
 
     async def update_multi(self, codes_rates: dict) -> None:
